@@ -1,0 +1,25 @@
+# Landing page direction
+
+Confirmed by Ray: one-to-one coaching, teaching through online classes, and hands-off personal-branding support. Visual direction: beige and pastel green, inspired by Ken Tjandra and Creator College. Exact shades, typography, audience, service scope and biography still need refinement.
+
+Ken Tjandra’s HTML content was accessible on the second inspection; browser inspection failed certificate verification. No TLS verification was bypassed. Creator College was blocked by network policy; its domains were added to the configuration draft while preserving existing domains. Do not claim visual replication of either reference.
+
+Superseded prototype offer: 50 free content hooks. See LANDING-PAGE-STRATEGY.md for the revised two-route funnel proposal. The hook bank and PDF are original draft content for Ray to review. They are hooks, not a course; future viral-format breakdowns can be a separate resource. No invented metrics, testimonials, or client claims are included.
+
+The current download works without collecting email addresses. Recommended next step: connect a Kit signup form and email delivery, with suitable consent wording. Ray has no email-list service yet. Do not show a fake successful signup or collect addresses without a real integration. Hosting, domain setup, and email delivery are not configured.
+
+## Development
+
+No packages or build step required. Use the existing isolated checkout; do not create a worktree unless requested. From `/workspace/personal-branding-website`, run `python3 -m http.server 3000 --bind 0.0.0.0`. Edit `index.html` and `styles.css`. `50-content-hooks.html` is the editable resource source and `50-content-hooks.pdf` its downloadable printable version. Regenerate the PDF after changing its source. Deploy all four public files when ready.
+
+## Updated visual references
+
+Ray supplied a muted green and warm beige image. Current matching palette: green #4e8e75 and beige #f4f1ea. Playfair Display 600 italic accents are paired with Manrope 800 headings, a clean open-source substitute for the suggested Clarify / Earnest style. Those exact commercial font files were not supplied. Fonts are self-hosted under fonts/ with OFL licences, distributed by Fontsource 5.3.0. Deploy fonts.css and fonts/ alongside the page and resource files. The PDF was regenerated with the new fonts and palette.
+
+## Strategy review
+
+Ray prioritised the landing page and business offer over the PDF. LANDING-PAGE-STRATEGY.md records inspected competitor offers, research limits, audience segmentation by learning versus delegation, recommended offer hypotheses, section purposes, measurement and outstanding implementation requirements. Do not treat the existing PDF-led prototype as an approved funnel.
+
+## Shared-journey landing page implementation
+
+Ray requested a single shared journey and a name/email form, with no committed free-training offer. The landing page now follows: shared outcome → recognisable problems → branding approach → Ray introduction → coaching/classes and hands-on support → FAQs → shared signup. All main calls to action reach the same form. The prototype hook/PDF offer is removed from the page. Fonts and image-inspired palette remain. The signup is explicitly opening soon, with disabled fields/button and an Instagram alternative, until a real provider is connected. No submitted email addresses are stored, transmitted or placed in URL queries. Mobile/desktop layout, section anchors, labelled inputs, FAQ interaction and pending integration state have been checked in Chromium. This is a draft, not a live lead-collection website.
