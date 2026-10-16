@@ -12,6 +12,7 @@ page = re.sub(r'<link rel="stylesheet" href="(?:fonts|styles)\.css">', '', page)
 page = page.replace('</head>', '<style>' + css + '</style></head>')
 site_script = (ROOT / 'site.js').read_text()
 page = page.replace('<script src="site.js" defer></script>', '')
+page = re.sub(r'(?m)^[ \t]+$', '', page)
 page = page.replace('</body>', '<script id="site-script">' + site_script + '</script></body>')
 (ROOT / 'ray-landing-page.html').write_text(page)
 controls = '''<aside class="preview-tools" id="preview-tools" aria-label="Personalise your page">
