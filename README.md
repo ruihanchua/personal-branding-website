@@ -8,17 +8,17 @@ A responsive landing page in Ray's muted green and beige, pairing bold Manrope h
 
 ## Open the full page on your computer
 
-1. Open `landing-page-preview.html` in this repository.
+1. Open `ray-landing-page.html` in this repository.
 2. Use GitHub's **Download raw file** button to download it.
 3. Double-click the downloaded HTML file to open it in your browser.
 
 The single HTML file includes the styles and fonts, so it needs no installation or server.
 
-### Add your photos without uploading them to chat
+### Edit photos and wording without uploading them to chat
 
-At the top of `landing-page-preview.html`, choose an opening photo (the smiling waterfall portrait) and a Meet Ray photo (the gallery portrait). Adjust their vertical framing with the sliders, then click **Save my page with photos**. Open the downloaded `ray-landing-page-with-photos.html` to see the finished page without editor controls. Photos stay in your browser; there is no network upload, and the exported file embeds both images. HEIC photos should first be exported as JPG. This personalised file is local until you choose to host or share it.
+For an editing version, download and open `landing-page-preview.html`. Ray’s selected waterfall and city-night photos are already included. Replace either photo and adjust its vertical framing with the sliders. Click **Edit page text**, then click headings, paragraphs or call-to-action wording to change them. Click **Save my page** and open the downloaded `ray-landing-page-personalised.html` to see the finished page without editor controls. Editing does not autosave; download before closing the tab. Changes remain local until the edited file is shared or hosted. Photos stay in your browser; there is no network upload, and the exported file embeds both images. HEIC photos should first be exported as JPG. This personalised file is local until you choose to host or share it.
 
-The uploaded chat images were visible for selection advice but were not made available as source files in the coding workspace; the selectors let you use those originals directly. GitHub shows HTML source in its file viewer; downloading and opening the file displays the website.
+Ray’s uploaded personalised HTML supplied the two source photographs, now extracted into `images/` and included in both portable downloads. The changed second photograph is the city-night portrait, not the earlier gallery candidate. GitHub shows HTML source in its file viewer; downloading and opening the file displays the website.
 
 ## Develop
 
@@ -28,7 +28,7 @@ Run from this checkout:
 python3 -m http.server 3000 --bind 0.0.0.0
 ```
 
-Edit `index.html`, `styles.css`, and `fonts.css`. Fonts and their licences are under `fonts/`. Regenerate the standalone preview with `python3 scripts/build-preview.py` after updating the source. Serve the source files to deploy to a static web host.
+Edit `index.html`, `styles.css`, and `fonts.css`. Fonts and their licences are under `fonts/`. Regenerate the standalone preview with `python3 scripts/build-preview.py` after updating the source. Deploy `index.html`, `styles.css`, `fonts.css`, `fonts/` and `images/` to a static web host, or host the standalone `ray-landing-page.html`.
 
 ## Current state
 
