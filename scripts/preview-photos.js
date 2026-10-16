@@ -3,7 +3,7 @@
   const save = document.getElementById('save-photos');
   let editing = false;
   const editButton = document.getElementById('edit-text');
-  const textBlocks = [...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main summary, main a.button .editable-label, main a.text-link .editable-label')];
+  const textBlocks = [...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main summary, main a.button .editable-label, main a.text-link .editable-label, main form label:not(.consent-label), main form legend, main .application-process strong')].filter(e => !e.closest('#application-review') && !['application-error', 'application-feedback'].includes(e.id));
   editButton.addEventListener('click', () => {
     editing = !editing;
     document.body.classList.toggle('edit-mode', editing);
@@ -25,6 +25,24 @@
       document.execCommand('insertText', false, event.clipboardData.getData('text/plain'));
     });
   }
+  const typeformInput = document.getElementById('typeform-url');
+  const application = document.getElementById('contact');
+  typeformInput.value = application.dataset.typeformUrl || '';
+  document.getElementById('connect-typeform').addEventListener('click', () => {
+    const raw = typeformInput.value.trim();
+    if (raw) {
+      try {
+        const url = new URL(raw);
+        if (url.protocol !== 'https:' || url.username || url.password || url.port || !(url.hostname === 'typeform.com' || url.hostname.endsWith('.typeform.com')) || !/^\/to\/[A-Za-z0-9]+\/?$/.test(url.pathname)) throw new Error('Invalid');
+      } catch {
+        status.textContent = 'Please use a published HTTPS Typeform link, like https://form.typeform.com/to/YourFormID.';
+        return;
+      }
+    }
+    application.dataset.typeformUrl = raw;
+    application.dispatchEvent(new Event('typeform-change'));
+    status.textContent = raw ? 'Typeform connected in this preview. Save your page to keep the link.' : 'Typeform disconnected. The local questionnaire preview is shown.';
+  });
   let pending = 0;
   for (const key of ['hero', 'about']) {
     const input = document.getElementById(`${key}-file`);
@@ -78,6 +96,27 @@
     clone.querySelector('body').classList.remove('edit-mode');
     for (const element of clone.querySelectorAll('[contenteditable]')) element.removeAttribute('contenteditable');
     clone.querySelector('#preview-photo-script').remove();
+    clone.querySelectorAll('.reveal-pending').forEach(e => e.classList.remove('reveal-pending'));
+    clone.querySelectorAll('[data-count]').forEach(e => { e.textContent = e.dataset.count; });
+    const clonedForm = clone.querySelector('#application-form');
+    for (const field of clonedForm.querySelectorAll('input, textarea, select')) {
+      if (field.tagName === 'TEXTAREA') { field.value = ''; field.textContent = ''; }
+      else if (field.tagName === 'SELECT') { field.selectedIndex = 0; field.querySelectorAll('option').forEach(o => o.removeAttribute('selected')); }
+      else { field.value = ''; field.removeAttribute('value'); field.checked = false; field.removeAttribute('checked'); }
+    }
+    clonedForm.querySelectorAll('[data-step]').forEach((e, i) => { e.hidden = i !== 0; });
+    clone.querySelector('#application-review').hidden = true;
+    clone.querySelector('#application-summary').replaceChildren();
+    clone.querySelector('#application-next').hidden = false;
+    clone.querySelector('#application-next').innerHTML = 'Continue <span aria-hidden="true">→</span>';
+    clone.querySelector('#application-back').hidden = true;
+    clone.querySelector('#step-label').textContent = 'Step 1 of 3';
+    clone.querySelector('#step-name').textContent = 'Your direction';
+    clone.querySelector('#step-progress-bar').style.width = '33.333%';
+    clone.querySelector('#application-error').textContent = '';
+    clone.querySelector('#application-feedback').textContent = '';
+    clone.querySelector('#copy-fallback').hidden = true;
+    clone.querySelector('#typeform-live').replaceChildren();
     const blob = new Blob(['<!doctype html>\n' + clone.outerHTML], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');

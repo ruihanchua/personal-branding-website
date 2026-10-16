@@ -28,11 +28,19 @@ Run from this checkout:
 python3 -m http.server 3000 --bind 0.0.0.0
 ```
 
-Edit `index.html`, `styles.css`, and `fonts.css`. Fonts and their licences are under `fonts/`. Regenerate the standalone preview with `python3 scripts/build-preview.py` after updating the source. Deploy `index.html`, `styles.css`, `fonts.css`, `fonts/` and `images/` to a static web host, or host the standalone `ray-landing-page.html`.
+Edit `index.html`, `styles.css`, `fonts.css`, and `site.js`. Fonts and their licences are under `fonts/`. Regenerate the standalone preview with `python3 scripts/build-preview.py` after updating the source. Deploy `index.html`, `styles.css`, `fonts.css`, `site.js`, `fonts/` and `images/` to a static web host, or host the standalone `ray-landing-page.html`.
+
+## Connect the application form
+
+The main action is **Apply to work with me**, leading to an application-first journey with email follow-up and no call required upfront. The local three-step questionnaire is explicitly a preview: no answers are sent or stored remotely. `TYPEFORM-QUESTIONS.md` contains suggested questions and setup guidance for Ray’s Typeform account.
+
+Publish the real Typeform, then paste its public link into **Your published Typeform link** at the top of `landing-page-preview.html`, click **Connect Typeform**, and **Save my page**. The saved page embeds that form and provides an open-in-new-tab link. A Typeform account/form, response notification setup, and actual submission delivery have not been configured or tested. Applicant answers entered in the local preview are cleared from the saved website.
 
 ## Current state
 
-- Layout, shared signup navigation and FAQs checked at 1440, 768, 390 and 320 pixels.
-- The name/email signup is explicitly marked as opening soon and disabled until a real email provider is connected. No email addresses are collected.
+- Layout and shared application navigation checked at 1440, 768, 390 and 320 pixels.
+- Questionnaire validation, safe review summary, back navigation, text/photo editing and export checked.
+- Section entrances, photo hover motion and the six-brand counter respect reduced-motion preferences.
+- No published Typeform URL has been supplied. The local questionnaire sends no applications. The Typeform integration was tested against a local stub for embedding/saving, not the real service.
 - Free training is not promised. The older hook-bank files are draft resources and are not linked from the landing page.
 - This branch contains a draft website, not a public website deployment.
