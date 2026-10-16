@@ -3,7 +3,7 @@
   const save = document.getElementById('save-photos');
   let editing = false;
   const editButton = document.getElementById('edit-text');
-  const textBlocks = [...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main summary, main a.button .editable-label, main a.text-link .editable-label, main form label:not(.consent-label), main form legend, main .application-process strong')].filter(e => !e.closest('#application-review') && !['application-error', 'application-feedback'].includes(e.id));
+  const textBlocks = [...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main summary, main a.button .editable-label, main a.text-link .editable-label, main form label:not(.consent-label), main form legend, main .application-process strong, main .industry-label, main .angle-note, main .angle-answer, main .storyboard strong')].filter(e => !e.closest('#application-review') && !['application-error', 'application-feedback'].includes(e.id) && !e.closest('.industry-copy'));
   editButton.addEventListener('click', () => {
     editing = !editing;
     document.body.classList.toggle('edit-mode', editing);
@@ -113,6 +113,9 @@
     clone.querySelector('#preview-photo-script').remove();
     clone.querySelectorAll('.reveal-pending').forEach(e => e.classList.remove('reveal-pending'));
     clone.querySelectorAll('[data-count]').forEach(e => { e.textContent = e.dataset.count; });
+    clone.querySelectorAll('.industry-copy').forEach(e => e.remove());
+    const exportedRibbon = clone.querySelector('#industry-marquee');
+    exportedRibbon.classList.remove('is-paused');
     const clonedForm = clone.querySelector('#application-form');
     for (const field of clonedForm.querySelectorAll('input, textarea, select')) {
       if (field.tagName === 'TEXTAREA') { field.value = ''; field.textContent = ''; }

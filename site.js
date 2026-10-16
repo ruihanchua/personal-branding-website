@@ -1,36 +1,92 @@
 (() => {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  if (!reducedMotion.matches && 'IntersectionObserver' in window) {
-    const elements = document.querySelectorAll('.problem-heading, .problem-cards article, .section-heading, .method-steps article, .example-block, .about-copy, .name-art, .service-cards article, .faq-items, .application-intro, .application-card');
-    const observer = new IntersectionObserver(entries => {
-      for (const entry of entries) if (entry.isIntersecting) {
-        entry.target.classList.remove('reveal-pending');
-        observer.unobserve(entry.target);
-      }
-    }, { threshold: 0.08 });
-    for (const element of elements) { element.classList.add('reveal-pending'); observer.observe(element); }
-    reducedMotion.addEventListener('change', () => {
-      if (reducedMotion.matches) { observer.disconnect(); elements.forEach(e => e.classList.remove('reveal-pending')); }
-    });
-    const count = document.querySelector('[data-count]');
-    if (count) {
-      const counter = new IntersectionObserver(entries => {
-        if (!entries.some(e => e.isIntersecting)) return;
-        counter.disconnect();
-        const target = Number(count.dataset.count);
-        const start = performance.now();
-        const tick = now => {
-          const progress = Math.min(1, (now - start) / 700);
-          count.textContent = String(Math.round(target * (1 - Math.pow(1 - progress, 3))));
-          if (progress < 1 && !reducedMotion.matches) requestAnimationFrame(tick);
-          else count.textContent = String(target);
-        };
-        requestAnimationFrame(tick);
-      }, { threshold: 0.5 });
-      counter.observe(count);
-    }
-  }
+  const ribbon = document.getElementById('industry-marquee');
+  const track = ribbon.querySelector('.industry-track');
+  const pause = document.getElementById('marquee-pause');
+  track.querySelectorAll('.industry-copy').forEach(e => e.remove());
+  const duplicate = track.querySelector('.industry-group').cloneNode(true);
+  duplicate.classList.add('industry-copy');
+  duplicate.setAttribute('aria-hidden', 'true');
+  duplicate.inert = true;
+  track.append(duplicate);
+  let userPaused = false;
+  const refreshRibbon = () => {
+    ribbon.classList.toggle('is-moving', !reducedMotion.matches);
+    ribbon.classList.toggle('is-paused', userPaused);
+    pause.hidden = reducedMotion.matches;
+    pause.setAttribute('aria-pressed', String(userPaused));
+    pause.textContent = userPaused ? 'Resume movement' : 'Pause movement';
+  };
+  pause.addEventListener('click', () => { userPaused = !userPaused; refreshRibbon(); });
+  ribbon.querySelector('.industry-viewport').addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch') { userPaused = true; refreshRibbon(); }
+  });
+  reducedMotion.addEventListener('change', refreshRibbon);
+  refreshRibbon();
 
+  const scenes = [...document.querySelectorAll('[data-scene]')];
+  const sceneLinks = [...document.querySelectorAll('[data-scene-link]')];
+  const sceneRoot = document.querySelector('.process-scenes');
+  let frame = 0;
+  const paintScroll = () => {
+    frame = 0;
+    const progress = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    document.getElementById('reading-progress-bar').style.transform = `scaleX(${Math.min(1, progress)})`;
+    const motion = !reducedMotion.matches && !document.body.classList.contains('edit-mode');
+    const mark = document.querySelector('.header .logo .symbol');
+    mark.style.transform = motion ? `rotate(${progress * 180}deg)` : '';
+    for (const image of document.querySelectorAll('.portrait-photo')) {
+      const rect = image.parentElement.getBoundingClientRect();
+      const offset = Math.max(-10, Math.min(10, (innerHeight / 2 - rect.top - rect.height / 2) * .035));
+      image.style.setProperty('--photo-shift', motion ? `${offset.toFixed(2)}px` : '0px');
+    }
+    const aboutPhoto = document.querySelector('.name-art');
+    const photoRect = aboutPhoto.getBoundingClientRect();
+    aboutPhoto.style.setProperty('--portrait-turn', motion ? `${Math.max(-1.3, Math.min(1.3, (photoRect.top / innerHeight - .4) * 3)).toFixed(2)}deg` : '0deg');
+    for (const card of document.querySelectorAll('.problem-cards article')) {
+      const rect = card.getBoundingClientRect();
+      const position = Math.max(-1, Math.min(1, rect.top / innerHeight - .35));
+      card.style.setProperty('--mark-angle', motion ? `${position * 15}deg` : '0deg');
+      card.style.setProperty('--mark-lift', motion ? `${position * 6}px` : '0px');
+    }
+    const start = sceneRoot.getBoundingClientRect().top + scrollY;
+    let position = start;
+    let active = 0;
+    for (let i = 0; i < scenes.length; i++) {
+      const scene = scenes[i];
+      const height = scene.offsetHeight + parseFloat(getComputedStyle(scene).marginBottom);
+      const distance = Math.max(0, Math.min(1, (scrollY + innerHeight * .58 - position) / height));
+      if (scrollY + innerHeight * .58 >= position) active = i;
+      scene.style.setProperty('--scene-progress', motion ? distance.toFixed(3) : '1');
+      scene.style.setProperty('--scene-turn', motion ? `${(distance - .5) * 30}deg` : '0deg');
+      position += height;
+    }
+    scenes.forEach((scene, i) => scene.classList.toggle('is-active', i === active));
+    sceneLinks.forEach((link, i) => { if (i === active) link.setAttribute('aria-current', 'step'); else link.removeAttribute('aria-current'); });
+  };
+  const schedulePaint = () => { if (!frame) frame = requestAnimationFrame(paintScroll); };
+  addEventListener('scroll', schedulePaint, { passive: true });
+  addEventListener('resize', schedulePaint);
+  reducedMotion.addEventListener('change', schedulePaint);
+  if ('ResizeObserver' in window) new ResizeObserver(schedulePaint).observe(document.body);
+  document.fonts.ready.then(schedulePaint);
+  schedulePaint();
+  const count = document.querySelector('[data-count]');
+  if (count && !reducedMotion.matches && 'IntersectionObserver' in window) {
+    const counter = new IntersectionObserver(entries => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      counter.disconnect();
+      const target = Number(count.dataset.count), start = performance.now();
+      const tick = now => {
+        const progress = Math.min(1, (now - start) / 650);
+        count.textContent = String(Math.round(target * (1 - Math.pow(1 - progress, 3))));
+        if (progress < 1 && !reducedMotion.matches) requestAnimationFrame(tick);
+        else count.textContent = String(target);
+      };
+      requestAnimationFrame(tick);
+    }, { threshold: .5 });
+    counter.observe(count);
+  }
 
   const hero = document.querySelector('.hero-art');
   const trigger = document.getElementById('hero-video-trigger');

@@ -9,6 +9,7 @@ css = (ROOT / 'fonts.css').read_text() + '\n' + (ROOT / 'styles.css').read_text(
 css = re.sub(r"url\('([^']+\.woff2)'\)", lambda m: "url('data:font/woff2;base64," + base64.b64encode((ROOT / m.group(1)).read_bytes()).decode() + "')", css)
 page = re.sub(r'src="(images/[^"]+\.jpg)"', lambda m: 'src="data:image/jpeg;base64,' + base64.b64encode((ROOT / m.group(1)).read_bytes()).decode() + '"', page)
 page = re.sub(r'<link rel="stylesheet" href="(?:fonts|styles)\.css">', '', page)
+page = page.replace('href="favicon.svg"', 'href="data:image/svg+xml;base64,' + base64.b64encode((ROOT / 'favicon.svg').read_bytes()).decode() + '"')
 page = page.replace('</head>', '<style>' + css + '</style></head>')
 site_script = (ROOT / 'site.js').read_text()
 page = page.replace('<script src="site.js" defer></script>', '')
