@@ -1,36 +1,49 @@
-# Apply to work with Ray — Typeform draft
+# Apply to work with Ray — application then optional booking
 
-Purpose: understand the applicant's needs before starting a conversation by email. One shared application for coaching/classes and hands-on execution support. No call is required to apply. Do not promise acceptance, a response deadline, free training or business results.
+## Recommended journey
+
+Landing page → completed Typeform application → successful submission saved in Typeform → optional booking link → call if booked, otherwise follow-up by email.
+
+A submitted application is a lead even if the person never books a call. A page visit, email field entry or partially completed form is not reliably a saved lead. Partial response collection depends on Typeform's available plan/features and configuration; do not assume it is enabled. Keep the application short enough to finish.
+
+The live Typeform does not yet exist in this workspace. The website has an explicitly labelled, local-only questionnaire preview and a connection field for Ray's published Typeform link. It does not send applications or book appointments until the real services are connected.
 
 ## Welcome screen
 
 **Tell me what you want to build.**
 
-A few questions about you, your goals, and the support you’re looking for. I’ll review your answers and follow up by email to explore whether we’re a good fit. Applying doesn’t commit you to buying anything.
+A few questions about you, your goals, and the support you’re looking for. After submitting, you can choose whether to book a call or start the conversation by email. Applying doesn’t commit you to buying anything.
 
 Button: Start my application
 
-## Questions
+## Questions, and why they are here
 
-1. **What’s your name?** — short text, required.
-2. **What email can I reach you at?** — email, required.
-3. **What kind of support are you looking for?** — multiple choice, required: coaching/classes to learn; hands-on help with execution; not sure yet.
-4. **What would you like your personal brand to help you do?** — long text, required.
-5. **Where can I find you online?** — website/profile URL, optional. Hint: Instagram, LinkedIn or your website. You can skip this if you're starting from scratch.
-6. **What’s the biggest thing holding you back right now?** — long text, required. Hint: ideas, confidence, time, or something else.
-7. **When would you like to get started?** — multiple choice, required: as soon as it’s a good fit; within the next few months; exploring for now.
-8. **May I contact you about this application?** — consent/yes-no, required. State that contact relates to this application. Do not bundle general newsletter consent into this request. Provide your applicable privacy information before launching the form.
+1. **What’s your name?** — short text, required. Identifies who Ray is replying to.
+2. **What email can I reach you at?** — email, required. Makes follow-up possible even if no call is booked. Being first does not itself guarantee saving a partial application.
+3. **What kind of support are you looking for?** — multiple choice, required: coaching/classes to learn; hands-on help with execution; not sure yet. Indicates the type of help, rather than splitting visitors into different funnels.
+4. **What would you like your personal brand to help you do?** — long text, required. Identifies the applicant's desired outcome.
+5. **What’s the biggest thing holding you back right now?** — long text, required. Helps Ray understand the problem and whether the current services fit.
+6. **Where can I find you online?** — website/profile URL, optional. Offers context without excluding beginners who do not have a profile.
+7. **When would you like to get started?** — multiple choice, optional: as soon as it’s a good fit; within the next few months; exploring for now. Helps prioritise follow-up without requiring a purchase-ready answer.
 
-## Ending screen
+Include appropriate contact/privacy information before submission and a contact-consent question if needed for your setup. The website preview explicitly asks permission to contact about this application. Newsletter marketing permission should be separate. Do not add a mandatory phone number, exact revenue, or detailed budget questionnaire before the actual offer and pricing are defined.
 
-**Thanks for telling me about your plans.**
+Submit button: Send my application
 
-Your application has been received. I’ll review your answers and follow up by email if it looks like we could be a good fit. No booking is required at this stage.
+## Ending screen, after successful submission
 
-Only use this confirmation on the real published Typeform after a successful submission. The local preview deliberately does not show a received/sent confirmation.
+**Application received. Want to talk it through?**
 
-## Connection
+Thanks for sharing what you’re building. You can book a conversation below if you’d like. Prefer email? You’re all set—I have your application and can follow up there.
 
-Create this form in Ray's own Typeform account, enable response notifications to the intended inbox, and verify the response appears in Typeform. Publish it, then copy the public https://form.typeform.com/to/FORMID URL into **Your published Typeform link** at the top of landing-page-preview.html and click **Connect Typeform**, then **Save my page**. A hosted link also appears beside the embedded form in case a visitor prefers to open it in a new tab.
+Optional button: Book a conversation → your real Calendly/Cal.com/other scheduling link.
 
-The integration accepts only HTTPS typeform.com / *.typeform.com URLs with /to/FORMID paths. It does not configure an account, notification email, billing plan, response quota or privacy policy. Check those settings with the real form before public launch. No Typeform link has been supplied yet, so the current page shows a local questionnaire preview, clearly marked as not sending answers.
+The booking step must occur after the response has been submitted and saved. Do not make booking a prerequisite for submitting the application. If the Typeform plan does not offer the desired ending-screen button or redirect, put the optional booking link in a response-confirmation/follow-up email instead. Do not promise a booking link in the intro recording until it is actually available.
+
+## Configure and check before launch
+
+Create and publish the form in Ray's own Typeform account. Enable notifications to the intended inbox. Add the optional booking destination to the ending/follow-up where supported. Confirm the privacy information and any contact consent are appropriate. Copy the public https://form.typeform.com/to/FORMID URL into Your published Typeform link at the top of landing-page-preview.html; click Connect Typeform, then Save my page.
+
+Test with your own details twice: submit but do not book; then submit and book. In both cases, confirm the full application appears in Typeform and the expected inbox receives its notification. In the second case also verify the calendar event and confirmation. If you stop before Submit, do not assume a lead is saved; check the actual response feature/settings. Track form completions separately from booking completions and avoid putting applicant details in general analytics.
+
+The website accepts only HTTPS typeform.com / *.typeform.com URLs with /to/FORMID paths. It does not configure an account, email notifications, billing plan, response quota, scheduling service or privacy policy. Real response capture and booking are still unverified.

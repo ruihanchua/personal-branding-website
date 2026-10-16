@@ -43,6 +43,21 @@
     application.dispatchEvent(new Event('typeform-change'));
     status.textContent = raw ? 'Typeform connected in this preview. Save your page to keep the link.' : 'Typeform disconnected. The local questionnaire preview is shown.';
   });
+  const videoInput = document.getElementById('intro-video-url');
+  const hero = document.querySelector('.hero-art');
+  videoInput.value = hero.dataset.videoUrl || '';
+  document.getElementById('connect-video').addEventListener('click', () => {
+    const previous = hero.dataset.videoUrl || '';
+    hero.dataset.videoUrl = videoInput.value.trim();
+    hero.dispatchEvent(new Event('video-change'));
+    if (videoInput.value.trim() && document.getElementById('hero-video-trigger').hidden) {
+      hero.dataset.videoUrl = previous;
+      hero.dispatchEvent(new Event('video-change'));
+      status.textContent = 'Use an HTTPS YouTube video link or public Vimeo video link.';
+      return;
+    }
+    status.textContent = videoInput.value.trim() ? 'Intro video connected. Save your page to keep the link.' : 'Intro video removed. Your portrait remains in the opening.';
+  });
   let pending = 0;
   for (const key of ['hero', 'about']) {
     const input = document.getElementById(`${key}-file`);
@@ -111,12 +126,14 @@
     clone.querySelector('#application-next').innerHTML = 'Continue <span aria-hidden="true">→</span>';
     clone.querySelector('#application-back').hidden = true;
     clone.querySelector('#step-label').textContent = 'Step 1 of 3';
-    clone.querySelector('#step-name').textContent = 'Your direction';
+    clone.querySelector('#step-name').textContent = 'About you';
     clone.querySelector('#step-progress-bar').style.width = '33.333%';
     clone.querySelector('#application-error').textContent = '';
     clone.querySelector('#application-feedback').textContent = '';
     clone.querySelector('#copy-fallback').hidden = true;
     clone.querySelector('#typeform-live').replaceChildren();
+    clone.querySelector('#intro-video-dialog').removeAttribute('open');
+    clone.querySelector('#intro-video-player').replaceChildren();
     const blob = new Blob(['<!doctype html>\n' + clone.outerHTML], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');

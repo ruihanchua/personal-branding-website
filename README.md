@@ -32,9 +32,13 @@ Edit `index.html`, `styles.css`, `fonts.css`, and `site.js`. Fonts and their lic
 
 ## Connect the application form
 
-The main action is **Apply to work with me**, leading to an application-first journey with email follow-up and no call required upfront. The local three-step questionnaire is explicitly a preview: no answers are sent or stored remotely. `TYPEFORM-QUESTIONS.md` contains suggested questions and setup guidance for Ray’s Typeform account.
+The main action is **Apply to work with me**, leading to an application-first journey with contact details first and an optional call after successful submission. The local three-step questionnaire is explicitly a preview: no answers are sent or stored remotely. `TYPEFORM-QUESTIONS.md` contains suggested questions and setup guidance for Ray’s Typeform account.
 
-Publish the real Typeform, then paste its public link into **Your published Typeform link** at the top of `landing-page-preview.html`, click **Connect Typeform**, and **Save my page**. The saved page embeds that form and provides an open-in-new-tab link. A Typeform account/form, response notification setup, and actual submission delivery have not been configured or tested. Applicant answers entered in the local preview are cleared from the saved website.
+Publish the real Typeform, then paste its public link into **Your published Typeform link** at the top of `landing-page-preview.html`, click **Connect Typeform**, and **Save my page**. The saved page embeds that form and provides an open-in-new-tab link. Configure the optional booking destination on the real Typeform ending screen (or follow-up email), after the application has been submitted. A submitted lead should remain in Typeform even if booking is skipped; partial answers are not guaranteed to be captured. A Typeform account/form, response notification setup, and actual submission delivery have not been configured or tested. Applicant answers entered in the local preview are cleared from the saved website.
+
+## Add the introduction video
+
+`INTRO-VIDEO-SCRIPT.md` contains a first spoken draft and shot plan. Record it, upload to YouTube or a supported public Vimeo URL, then paste the video link into **Your intro video link** in `landing-page-preview.html`, click **Connect intro video**, and save. The hero portrait becomes a clickable poster. The player opens in a keyboard-accessible dialog and loads only after a click. With no video URL configured, the page keeps the real photo and displays no fake play control. Public/unlisted YouTube URLs are supported; private/restricted videos may not embed. Real video playback cannot be verified until Ray supplies a recording/link.
 
 ## Current state
 

@@ -31,6 +31,49 @@
     }
   }
 
+
+  const hero = document.querySelector('.hero-art');
+  const trigger = document.getElementById('hero-video-trigger');
+  const videoDialog = document.getElementById('intro-video-dialog');
+  const player = document.getElementById('intro-video-player');
+  const videoEmbed = raw => {
+    try {
+      const u = new URL(raw);
+      if (u.protocol !== 'https:' || u.username || u.password || u.port) return null;
+      const host = u.hostname.replace(/^www\./, '');
+      let id;
+      if (host === 'youtu.be') id = u.pathname.slice(1);
+      else if (host === 'youtube.com' || host === 'youtube-nocookie.com') id = u.pathname === '/watch' ? u.searchParams.get('v') : u.pathname.match(/^\/(?:embed|shorts)\/([^/]+)\/?$/)?.[1];
+      if (id && /^[A-Za-z0-9_-]{11}$/.test(id)) return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+      if (host === 'vimeo.com' || host === 'player.vimeo.com') {
+        const match = u.pathname.match(/^\/(?:video\/)?(\d+)\/?$/);
+        if (match) return `https://player.vimeo.com/video/${match[1]}?autoplay=1`;
+      }
+      return null;
+    } catch { return null; }
+  };
+  const configureVideo = () => {
+    const embed = videoEmbed(hero.dataset.videoUrl || '');
+    trigger.hidden = !embed;
+    hero.classList.toggle('has-video', !!embed);
+    trigger.dataset.embed = embed || '';
+  };
+  hero.addEventListener('video-change', configureVideo);
+  configureVideo();
+  trigger.addEventListener('click', () => {
+    if (document.body.classList.contains('edit-mode') || !trigger.dataset.embed) return;
+    const iframe = document.createElement('iframe');
+    iframe.src = trigger.dataset.embed;
+    iframe.title = 'Ray Chua’s introduction';
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    player.replaceChildren(iframe);
+    videoDialog.showModal();
+  });
+  document.getElementById('video-dialog-close').addEventListener('click', () => videoDialog.close());
+  videoDialog.addEventListener('close', () => { player.replaceChildren(); trigger.focus({ preventScroll: true }); });
+
   const section = document.getElementById('contact');
   const live = document.getElementById('typeform-live');
   const preview = document.getElementById('application-preview');
@@ -66,7 +109,7 @@
   const review = document.getElementById('application-review');
   let step = 0;
   let answerText = '';
-  const names = ['Your direction', 'Your starting point', 'Your details', 'Review your answers'];
+  const names = ['About you', 'Your direction', 'Your starting point', 'Review your answers'];
   const show = () => {
     steps.forEach((field, i) => { field.hidden = i !== step; });
     review.hidden = step !== 3;
