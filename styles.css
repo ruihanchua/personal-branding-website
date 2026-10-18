@@ -16,3 +16,7 @@
 
 /* Stronger contrast for small copy while retaining Ray's reference green. */
 .contact .eyebrow,.application-intro>p:not(.eyebrow),.application-process{color:#03180c}.application-process li>span{border-color:#03180c60}.angle-answer{background:var(--dark-green)}.hero-video-trigger>span:last-child{background:#243c32eb;padding:8px 14px;border-radius:5px}
+
+/* Concrete example: readable sequence without extra scroll effects. */
+.example-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:30px}.example-flow article{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:28px}.example-flow .eyebrow{display:block;color:var(--dark-green);margin-bottom:22px}.example-flow h3{font-size:26px;line-height:1.25;margin-bottom:18px}.example-flow p,.content-example .compact-heading>p:last-child,.example-note{font-size:16px;color:var(--muted)}.example-note{margin:22px 0 0}.example-flow article:nth-child(2){background:var(--paper)}.example-flow article:nth-child(3){border-top:4px solid var(--green)}
+@media(max-width:800px){.example-flow{grid-template-columns:1fr}.example-flow article{padding:25px}}

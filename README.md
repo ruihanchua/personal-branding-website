@@ -1,3 +1,5 @@
+> Latest update: the published Typeform link is connected. The offer now specifies content ideas, scripting guidance and video editing, with clients filming and publishing. A labelled illustrative example demonstrates the process. See [form review status](TYPEFORM-REVIEW.md): this environment could not inspect or submit the external form.
+
 # Ray Chua — personal-branding landing page
 
 A responsive landing page in Ray's muted green and beige, pairing bold Manrope headings with Playfair Display italic. The page leads with visitor struggles and practical support, then shows the approach, anonymised editing experience and Ray’s story. Hands-on execution is the first support option; guidance remains available.
