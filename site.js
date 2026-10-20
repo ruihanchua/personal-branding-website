@@ -1,5 +1,6 @@
 (() => {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  let motionPaused = false;
   const ribbon = document.getElementById('industry-marquee');
   const track = ribbon.querySelector('.industry-track');
   const pause = document.getElementById('marquee-pause');
@@ -11,7 +12,7 @@
   track.append(duplicate);
   let userPaused = false;
   const refreshRibbon = () => {
-    ribbon.classList.toggle('is-moving', !reducedMotion.matches);
+    ribbon.classList.toggle('is-moving', !reducedMotion.matches && !motionPaused);
     ribbon.classList.toggle('is-paused', userPaused);
     pause.hidden = reducedMotion.matches;
     pause.setAttribute('aria-pressed', String(userPaused));
@@ -32,7 +33,7 @@
     frame = 0;
     const progress = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight);
     document.getElementById('reading-progress-bar').style.transform = `scaleX(${Math.min(1, progress)})`;
-    const motion = !reducedMotion.matches && !document.body.classList.contains('edit-mode');
+    const motion = !reducedMotion.matches && !motionPaused && !document.body.classList.contains('edit-mode');
     const mark = document.querySelector('.header .logo .symbol');
     mark.style.transform = motion ? `rotate(${progress * 180}deg)` : '';
     for (const image of document.querySelectorAll('.portrait-photo')) {
@@ -71,6 +72,29 @@
   if ('ResizeObserver' in window) new ResizeObserver(schedulePaint).observe(document.body);
   document.fonts.ready.then(schedulePaint);
   schedulePaint();
+  // Keep content visible without JavaScript; enhance only decorative movement.
+  const motionToggle = document.getElementById('motion-toggle');
+  const motionTargets = document.querySelectorAll('.problem-cards article, .service-cards article, .compact-heading, .resource-cover');
+  motionTargets.forEach((el, i) => { el.classList.add('motion-entry'); el.style.setProperty('--entry-delay', `${(i % 3) * 110}ms`); });
+  const enterObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('has-entered'); enterObserver.unobserve(entry.target); } });
+  }, { threshold: .12 }) : null;
+  motionTargets.forEach(el => enterObserver?.observe(el));
+  motionToggle.hidden = false;
+  motionToggle.addEventListener('click', () => {
+    motionPaused = !motionPaused;
+    document.body.classList.toggle('motion-paused', motionPaused);
+    motionToggle.setAttribute('aria-pressed', String(motionPaused));
+    motionToggle.textContent = motionPaused ? 'Resume animations' : 'Pause animations';
+    refreshRibbon(); schedulePaint();
+  });
+  const heroArt = document.querySelector('.hero-art');
+  heroArt.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse' || motionPaused || reducedMotion.matches || document.body.classList.contains('edit-mode')) return;
+    const rect = heroArt.getBoundingClientRect();
+    heroArt.style.setProperty('--hero-tilt', `${((e.clientX - rect.left) / rect.width - .5) * 5}deg`);
+  });
+  heroArt.addEventListener('pointerleave', () => heroArt.style.setProperty('--hero-tilt', '0deg'));
   const count = document.querySelector('[data-count]');
   if (count && !reducedMotion.matches && 'IntersectionObserver' in window) {
     const counter = new IntersectionObserver(entries => {

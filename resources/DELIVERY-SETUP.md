@@ -6,7 +6,7 @@ Files prepared:
 
 Matching HTML source files are included for future editing and browser reading. Resource links are public once hosted; email gating does not prevent recipients sharing downloaded files.
 
-Typeform 2's public URL has not been supplied. Keep the current service application connected. Do not substitute or add a dead resource button. No email automation, subscriber record, marketing consent capture or real delivery has been configured or tested.
+Typeform 2 is https://form.typeform.com/to/F0owZ74B and is linked from the landing page's separate resource section. Its live questions and ending have not been inspected in this environment. Keep the current service application connected. The resource section explicitly states email delivery is still being connected; remove that notice only after a successful end-to-end delivery test. No email automation, subscriber record, marketing consent capture or real delivery has been configured or tested.
 
 ## Connect when ready
 
