@@ -9,6 +9,7 @@
   };
   const desktopMotion = matchMedia('(min-width: 801px) and (pointer: fine)');
   let smoothScroll = null;
+  let nativeEnding = false;
   const syncSmoothScroll = () => {
     syncDepth();
     const enabled = !reducedMotion.matches && !motionPaused && desktopMotion.matches
@@ -16,7 +17,7 @@
     if (!enabled && smoothScroll) { smoothScroll.destroy(); smoothScroll = null; }
     if (enabled && !smoothScroll && typeof window.Lenis === 'function') {
       smoothScroll = new window.Lenis({
-        autoRaf: true, lerp: .13, smoothWheel: true, syncTouch: false, anchors: false,
+        autoRaf: true, lerp: .13, smoothWheel: !nativeEnding, syncTouch: false, anchors: false,
         prevent: node => node.matches?.('input, textarea, select, [contenteditable="true"], [data-lenis-prevent]')
       });
     }
@@ -81,6 +82,12 @@
     frame = 0;
     const progress = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight);
     document.getElementById('reading-progress-bar').style.transform = `scaleX(${Math.min(1, progress)})`;
+    // A hysteresis band avoids rapid mode changes at the iframe boundary.
+    const endingTop = document.getElementById('contact').getBoundingClientRect().top;
+    if (!nativeEnding && endingTop < innerHeight + 160) nativeEnding = true;
+    else if (nativeEnding && endingTop > innerHeight + 360) nativeEnding = false;
+    if (smoothScroll) smoothScroll.options.smoothWheel = !nativeEnding;
+    document.documentElement.dataset.scrollMode = nativeEnding ? 'native-ending' : 'page';
     const motion = !reducedMotion.matches && !motionPaused && !document.body.classList.contains('edit-mode');
     const mark = document.querySelector('.header .logo .symbol');
     mark.style.transform = motion ? `rotate(${progress * 180}deg)` : '';

@@ -17,3 +17,9 @@ A 165svh opening scene on fine-pointer viewports at least 1050px wide and 850px 
 Problem cards use shallow perspective and the approach cards enter on a depth plane. Decorative frames are aria-hidden. The existing service Typeform and three FAQs remain unchanged. Export resets transient depth classes before reinitializing.
 
 Additional checks passed: pinned stage on a qualifying desktop, different portrait matrices before/after scrolling, no horizontal overflow mid-scene, and static layouts after pause/reduced-motion. The earlier Lenis functional suite also passed after the update.
+
+## Ending scroll correction
+
+The contact area now uses native wheel handling through Lenis's smoothWheel option. A 200px hysteresis band prevents repeated mode changes at the boundary. Programmatic same-page navigation still completes normally. The application introduction is static rather than sticky.
+
+Checked with an embedded form stub: downward wheel samples did not reverse; document height stayed constant; native mode entered and exited on reverse scrolling; a form field accepted input. The existing five-width/navigation/editor/export/fallback suite also passed. This is a targeted handoff fix, not proof that every device-specific visual glitch has been reproduced. No live Typeform submission was made.
