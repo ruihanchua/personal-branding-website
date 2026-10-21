@@ -9,3 +9,11 @@ Scroll effects: decorative story ribbon, slight card rotation, scene scaling, po
 The reference https://lenis.dev/ was blocked by the environment proxy. Implementation is based on the official package documentation, not a verified copy of that demo's choreography.
 
 Browser checks: actual wheel interpolation; ribbon response; application anchor; 1440/1024/768/390/320px bounds; touch-native and reduced-motion behavior; pause/resume; editing; standalone export; missing-library fallback. The external Typeform was stubbed; no live response was submitted.
+
+## Depth treatment
+
+A 165svh opening scene on fine-pointer viewports at least 1050px wide and 850px tall uses a sticky stage, perspective layers, a portrait moving forward and copy receding. Shorter/smaller viewports retain the ordinary document layout. Pausing animations, reduced motion and editing disable the pinned scene. Native scroll still controls progress; no scroll locking or forced page snapping.
+
+Problem cards use shallow perspective and the approach cards enter on a depth plane. Decorative frames are aria-hidden. The existing service Typeform and three FAQs remain unchanged. Export resets transient depth classes before reinitializing.
+
+Additional checks passed: pinned stage on a qualifying desktop, different portrait matrices before/after scrolling, no horizontal overflow mid-scene, and static layouts after pause/reduced-motion. The earlier Lenis functional suite also passed after the update.

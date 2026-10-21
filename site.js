@@ -2,9 +2,15 @@
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   let motionPaused = false;
   // Lenis enhances wheel scrolling only; touch, keyboard and nested forms remain native.
+  const depthViewport = matchMedia('(min-width: 1050px) and (min-height: 850px) and (pointer: fine)');
+  const syncDepth = () => {
+    const enabled = depthViewport.matches && !reducedMotion.matches && !motionPaused && !document.body.classList.contains('edit-mode');
+    if (document.body.classList.contains('depth-motion') !== enabled) document.body.classList.toggle('depth-motion', enabled);
+  };
   const desktopMotion = matchMedia('(min-width: 801px) and (pointer: fine)');
   let smoothScroll = null;
   const syncSmoothScroll = () => {
+    syncDepth();
     const enabled = !reducedMotion.matches && !motionPaused && desktopMotion.matches
       && !document.body.classList.contains('edit-mode') && !document.querySelector('dialog[open]');
     if (!enabled && smoothScroll) { smoothScroll.destroy(); smoothScroll = null; }
@@ -17,6 +23,7 @@
   };
   reducedMotion.addEventListener('change', syncSmoothScroll);
   desktopMotion.addEventListener('change', syncSmoothScroll);
+  depthViewport.addEventListener('change', syncSmoothScroll);
   new MutationObserver(syncSmoothScroll).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   const dialogForScroll = document.getElementById('intro-video-dialog');
   new MutationObserver(syncSmoothScroll).observe(dialogForScroll, { attributes: true, attributeFilter: ['open'] });
@@ -90,6 +97,7 @@
       const position = Math.max(-1, Math.min(1, rect.top / innerHeight - .35));
       card.style.setProperty('--mark-angle', motion ? `${position * 15}deg` : '0deg');
       card.style.setProperty('--mark-lift', motion ? `${position * 6}px` : '0px');
+      card.style.setProperty('--card-depth', motion ? String(Math.max(0, Math.min(1, (innerHeight - rect.top) / (innerHeight * .7)))) : '1');
       card.style.setProperty('--card-turn', motion ? `${position * 2.5}deg` : '0deg');
     }
     const strip = document.querySelector('.story-strip');
@@ -97,7 +105,13 @@
       const relative = Math.max(-1, Math.min(1, strip.getBoundingClientRect().top / innerHeight));
       strip.style.setProperty('--strip-shift', motion ? `${relative * 110 - 90}px` : '-90px');
     }
-    const heroRect = document.querySelector('.hero').getBoundingClientRect();
+    const journey = document.querySelector('.hero-journey');
+    const heroStage = document.querySelector('.hero');
+    const travel = Math.max(1, journey.offsetHeight - heroStage.offsetHeight);
+    const journeyStart = journey.getBoundingClientRect().top + scrollY - document.querySelector('.header').offsetHeight;
+    const depth = motion && document.body.classList.contains('depth-motion') ? Math.max(0, Math.min(1, (scrollY - journeyStart) / travel)) : 0;
+    heroStage.style.setProperty('--depth-progress', depth.toFixed(4));
+    const heroRect = heroStage.getBoundingClientRect();
     document.querySelector('.hero-art').style.setProperty('--hero-scroll', motion ? String(Math.max(0, Math.min(1, -heroRect.top / heroRect.height))) : '0');
     const start = sceneRoot.getBoundingClientRect().top + scrollY;
     let position = start;
