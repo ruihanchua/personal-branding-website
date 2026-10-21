@@ -5,14 +5,14 @@ import re
 
 ROOT = Path(__file__).resolve().parent.parent
 page = (ROOT / 'index.html').read_text()
-css = (ROOT / 'fonts.css').read_text() + '\n' + (ROOT / 'styles.css').read_text()
+css = (ROOT / 'fonts.css').read_text() + '\n' + (ROOT / 'vendor/lenis/lenis.css').read_text() + '\n' + (ROOT / 'styles.css').read_text()
 css = re.sub(r"url\('([^']+\.woff2)'\)", lambda m: "url('data:font/woff2;base64," + base64.b64encode((ROOT / m.group(1)).read_bytes()).decode() + "')", css)
 page = re.sub(r'src="(images/[^"]+\.jpg)"', lambda m: 'src="data:image/jpeg;base64,' + base64.b64encode((ROOT / m.group(1)).read_bytes()).decode() + '"', page)
-page = re.sub(r'<link rel="stylesheet" href="(?:fonts|styles)\.css">', '', page)
+page = re.sub(r'<link rel="stylesheet" href="(?:fonts|styles|vendor/lenis/lenis)\.css">', '', page)
 page = page.replace('href="favicon.svg"', 'href="data:image/svg+xml;base64,' + base64.b64encode((ROOT / 'favicon.svg').read_bytes()).decode() + '"')
 page = page.replace('</head>', '<style>' + css + '</style></head>')
-site_script = (ROOT / 'site.js').read_text()
-page = page.replace('<script src="site.js" defer></script>', '')
+site_script = (ROOT / 'vendor/lenis/lenis.min.js').read_text() + '\n;\n' + (ROOT / 'site.js').read_text()
+page = page.replace('<script src="site.js" defer></script>', '').replace('<script src="vendor/lenis/lenis.min.js" defer></script>', '')
 page = re.sub(r'(?m)^[ \t]+$', '', page)
 page = page.replace('</body>', '<script id="site-script">' + site_script + '</script></body>')
 (ROOT / 'ray-landing-page.html').write_text(page)

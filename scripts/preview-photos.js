@@ -108,7 +108,10 @@
   save.addEventListener('click', () => {
     const clone = document.documentElement.cloneNode(true);
     clone.querySelector('#preview-tools').remove();
-    clone.querySelector('body').classList.remove('edit-mode');
+    clone.querySelector('body').classList.remove('edit-mode', 'motion-paused');
+    clone.classList.remove('lenis', 'lenis-smooth', 'lenis-scrolling', 'lenis-stopped');
+    clone.querySelector('#motion-toggle').setAttribute('aria-pressed', 'false');
+    clone.querySelector('#motion-toggle').textContent = 'Pause animations';
     for (const element of clone.querySelectorAll('[contenteditable]')) element.removeAttribute('contenteditable');
     clone.querySelector('#preview-photo-script').remove();
     clone.querySelectorAll('.reveal-pending').forEach(e => e.classList.remove('reveal-pending'));

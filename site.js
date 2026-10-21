@@ -1,6 +1,47 @@
 (() => {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   let motionPaused = false;
+  // Lenis enhances wheel scrolling only; touch, keyboard and nested forms remain native.
+  const desktopMotion = matchMedia('(min-width: 801px) and (pointer: fine)');
+  let smoothScroll = null;
+  const syncSmoothScroll = () => {
+    const enabled = !reducedMotion.matches && !motionPaused && desktopMotion.matches
+      && !document.body.classList.contains('edit-mode') && !document.querySelector('dialog[open]');
+    if (!enabled && smoothScroll) { smoothScroll.destroy(); smoothScroll = null; }
+    if (enabled && !smoothScroll && typeof window.Lenis === 'function') {
+      smoothScroll = new window.Lenis({
+        autoRaf: true, lerp: .13, smoothWheel: true, syncTouch: false, anchors: false,
+        prevent: node => node.matches?.('input, textarea, select, [contenteditable="true"], [data-lenis-prevent]')
+      });
+    }
+  };
+  reducedMotion.addEventListener('change', syncSmoothScroll);
+  desktopMotion.addEventListener('change', syncSmoothScroll);
+  new MutationObserver(syncSmoothScroll).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  const dialogForScroll = document.getElementById('intro-video-dialog');
+  new MutationObserver(syncSmoothScroll).observe(dialogForScroll, { attributes: true, attributeFilter: ['open'] });
+  syncSmoothScroll();
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!smoothScroll || !link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const hash = link.getAttribute('href');
+    const target = hash === '#' ? document.documentElement : document.getElementById(hash.slice(1));
+    if (!target) return;
+    event.preventDefault();
+    const offset = -(document.querySelector('.header').offsetHeight + 20);
+    const destination = hash === '#' ? 0 : Math.max(0, target.getBoundingClientRect().top + window.scrollY + offset);
+    smoothScroll.scrollTo(destination, { onComplete: () => {
+      if (hash !== '#') {
+        if (location.hash !== hash) history.pushState(null, '', hash);
+        if (!target.hasAttribute('tabindex')) {
+          target.setAttribute('tabindex', '-1');
+          target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+        }
+        target.focus({ preventScroll: true });
+      }
+    }});
+  });
+
   const ribbon = document.getElementById('industry-marquee');
   const track = ribbon.querySelector('.industry-track');
   const pause = document.getElementById('marquee-pause');
@@ -49,7 +90,15 @@
       const position = Math.max(-1, Math.min(1, rect.top / innerHeight - .35));
       card.style.setProperty('--mark-angle', motion ? `${position * 15}deg` : '0deg');
       card.style.setProperty('--mark-lift', motion ? `${position * 6}px` : '0px');
+      card.style.setProperty('--card-turn', motion ? `${position * 2.5}deg` : '0deg');
     }
+    const strip = document.querySelector('.story-strip');
+    if (strip) {
+      const relative = Math.max(-1, Math.min(1, strip.getBoundingClientRect().top / innerHeight));
+      strip.style.setProperty('--strip-shift', motion ? `${relative * 110 - 90}px` : '-90px');
+    }
+    const heroRect = document.querySelector('.hero').getBoundingClientRect();
+    document.querySelector('.hero-art').style.setProperty('--hero-scroll', motion ? String(Math.max(0, Math.min(1, -heroRect.top / heroRect.height))) : '0');
     const start = sceneRoot.getBoundingClientRect().top + scrollY;
     let position = start;
     let active = 0;
@@ -86,7 +135,7 @@
     document.body.classList.toggle('motion-paused', motionPaused);
     motionToggle.setAttribute('aria-pressed', String(motionPaused));
     motionToggle.textContent = motionPaused ? 'Resume animations' : 'Pause animations';
-    refreshRibbon(); schedulePaint();
+    refreshRibbon(); syncSmoothScroll(); schedulePaint();
   });
   const heroArt = document.querySelector('.hero-art');
   heroArt.addEventListener('pointermove', e => {
