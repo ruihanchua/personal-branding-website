@@ -7,3 +7,7 @@ The approach cards read as separate blocks on phones instead of overlapping stic
 Desktop Lenis and depth treatment are retained. The self-contained editable export includes the mobile layout and resets an open mobile menu before download.
 
 Checks passed: 320×568, 360×640, 375×667, 390×844, 430×932 and 768×1024 touch viewports; no horizontal page overflow; menu and Escape; section anchors; nonoverlapping approach cards; swipe rail; minimum menu target dimensions; native touch scrolling; application links and form-field interaction with a test iframe; reduced motion; export. Existing desktop scrolling/fallback suite passed too. External Typeform was stubbed, so no live application was submitted. Emulation does not replace checking Instagram's browser on a real phone.
+
+## Industry ribbon follow-up
+
+Restored automatic movement on mobile by request. Touching the cards pauses the ribbon; the visible Pause/Resume button can restart it. Hover pause is restricted to hover-capable devices, and focus pause applies to the card viewport rather than the Resume button. Reduced-motion and global pause retain a static rail. Verified actual transform movement and all pause/resume states in touch emulation. Biography awaits Ray's answers about the motivations and experiences behind ages 17–19.
