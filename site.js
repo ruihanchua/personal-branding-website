@@ -50,6 +50,18 @@
     }});
   });
 
+  const mobileMenu = document.querySelector('.mobile-menu');
+  mobileMenu.addEventListener('click', event => {
+    if (event.target.closest('a')) mobileMenu.open = false;
+  });
+  document.addEventListener('click', event => {
+    if (!mobileMenu.contains(event.target)) mobileMenu.open = false;
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && mobileMenu.open) {
+      mobileMenu.open = false; mobileMenu.querySelector('summary').focus();
+    }
+  });
   const ribbon = document.getElementById('industry-marquee');
   const track = ribbon.querySelector('.industry-track');
   const pause = document.getElementById('marquee-pause');

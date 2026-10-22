@@ -108,6 +108,7 @@
   save.addEventListener('click', () => {
     const clone = document.documentElement.cloneNode(true);
     clone.querySelector('#preview-tools').remove();
+    clone.querySelector('.mobile-menu').removeAttribute('open');
     clone.querySelector('body').classList.remove('edit-mode', 'motion-paused', 'depth-motion');
     clone.classList.remove('lenis', 'lenis-smooth', 'lenis-scrolling', 'lenis-stopped');
     clone.querySelector('#motion-toggle').setAttribute('aria-pressed', 'false');
