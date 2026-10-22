@@ -3,7 +3,7 @@
   const save = document.getElementById('save-photos');
   let editing = false;
   const editButton = document.getElementById('edit-text');
-  const textBlocks = [...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main summary, main a.button .editable-label, main a.text-link .editable-label, main form label:not(.consent-label), main form legend, main .application-process strong, main .industry-label, main .angle-note, main .angle-answer, main .storyboard strong')].filter(e => !e.closest('#application-review') && !['application-error', 'application-feedback'].includes(e.id) && !e.closest('.industry-copy'));
+  const textBlocks = [...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main summary, main a.button .editable-label, main a.text-link .editable-label, main form label:not(.consent-label), main form legend, main .application-process strong, main .industry-label, main .timeline-age, main .angle-note, main .angle-answer, main .storyboard strong')].filter(e => !e.closest('#application-review') && !['application-error', 'application-feedback'].includes(e.id) && !e.closest('.industry-copy') && !e.matches('.timeline-item'));
   editButton.addEventListener('click', () => {
     editing = !editing;
     document.body.classList.toggle('edit-mode', editing);
